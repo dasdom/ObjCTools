@@ -52,6 +52,14 @@
 					<key>XCSourceEditorCommandName</key>
 					<string>Sort Imports and Remove Duplicates</string>
 				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).HexToUIColor</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Hex to UIColor</string>
+				</dict>
 			</array>
 			<key>XCSourceEditorExtensionPrincipalClass</key>
 			<string>SourceEditorExtension</string>

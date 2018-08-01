@@ -63,6 +63,44 @@
         NSArray<NSString *> *allImports = [[allImportsSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
         
         [buffer.lines insertObjects:allImports atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(firstImport, [allImports count])]];
+    } else if ([invocation.commandIdentifier isEqualToString:@"de.dasdom.ObjCTools.ObjCToolsXcodeExtension.HexToUIColor"]) {
+        
+        NSString *string = [line substringWithRange:NSMakeRange(firstSelection.start.column, firstSelection.end.column-firstSelection.start.column)];
+
+        NSScanner *scanner = [NSScanner scannerWithString:string];
+        scanner.charactersToBeSkipped = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
+        
+        unsigned value;
+        [scanner scanHexInt:&value];
+        
+        CGFloat r = 0;
+        CGFloat g = 0;
+        CGFloat b = 0;
+        CGFloat a = 0;
+        if (string.length > 7) {
+            r = ((value & 0xFF000000) >> 24) / 255.0f;
+            g = ((value & 0xFF0000) >> 16) / 255.0f;
+            b = ((value & 0xFF00) >> 8) / 255.0f;
+            a = ((value & 0xFF)) / 255.0f;
+        } else {
+            r = ((value & 0xFF0000) >> 16) / 255.0f;
+            g = ((value & 0xFF00) >> 8) / 255.0f;
+            b = ((value & 0xFF)) / 255.0f;
+            a = 1.0;
+        }
+        NSMutableString *indentation = [[NSMutableString alloc] initWithString:@""];
+        for (int i = 0; i<buffer.indentationWidth; i++) {
+            [indentation appendString:@" "];
+        }
+        if (buffer.usesTabsForIndentation) {
+            NSMutableString *spacesToReplace = [[NSMutableString alloc] initWithString:@""];
+            for (int i = 0; i<buffer.tabWidth; i++) {
+                [spacesToReplace appendString:@" "];
+            }
+            [indentation replaceOccurrencesOfString:spacesToReplace withString:@"\t" options:0 range:NSMakeRange(0, indentation.length)];
+        }
+        NSString *nextLine = [NSString stringWithFormat:@"%@UIColor *<#name#> = [UIColor colorWithRed:%f green:%f blue:%f alpha:%f];", indentation, r, g, b, a];
+        [buffer.lines insertObject:nextLine atIndex:lineNumber+1];
     }
     
     completionHandler(error);
