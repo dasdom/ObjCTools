@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1.1</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>3</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSExtension</key>
@@ -34,15 +34,15 @@
 					<key>XCSourceEditorCommandIdentifier</key>
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).ImportHeader</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>Import Header</string>
+					<string>Import Header (ObjC)</string>
 				</dict>
 				<dict>
 					<key>XCSourceEditorCommandClassName</key>
 					<string>SourceEditorCommand</string>
 					<key>XCSourceEditorCommandIdentifier</key>
-					<string>$(PRODUCT_BUNDLE_IDENTIFIER).DoublicateLineAndReplaceStrings</string>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).DublicateLineAndReplaceStrings</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>Doublicate Line and Replace Strings</string>
+					<string>Dublicate Line and Replace Strings (ObjC)</string>
 				</dict>
 				<dict>
 					<key>XCSourceEditorCommandClassName</key>
@@ -50,7 +50,7 @@
 					<key>XCSourceEditorCommandIdentifier</key>
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).SortImportsAndRemoveDuplicates</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>Sort Imports and Remove Duplicates</string>
+					<string>Sort Imports and Remove Duplicates (ObjC and Swift)</string>
 				</dict>
 				<dict>
 					<key>XCSourceEditorCommandClassName</key>
@@ -58,7 +58,7 @@
 					<key>XCSourceEditorCommandIdentifier</key>
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).HexToUIColor</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>Hex to UIColor</string>
+					<string>Hex to UIColor (ObjC and Swift)</string>
 				</dict>
 			</array>
 			<key>XCSourceEditorExtensionPrincipalClass</key>

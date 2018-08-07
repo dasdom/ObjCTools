@@ -25,7 +25,7 @@
         } else {
             error = [NSError errorWithDomain:@"WrongLanguage" code:1001 userInfo:@{NSLocalizedDescriptionKey: @"This functionality only supports Objctive-C."}];
         }
-    } else if ([invocation.commandIdentifier isEqualToString:@"de.dasdom.ObjCTools.ObjCToolsXcodeExtension.DoublicateLineAndReplaceStrings"]) {
+    } else if ([invocation.commandIdentifier isEqualToString:@"de.dasdom.ObjCTools.ObjCToolsXcodeExtension.DublicateLineAndReplaceStrings"]) {
         
         if ([invocation.buffer.contentUTI isEqualToString:@"public.objective-c-source"]) {
             
@@ -99,7 +99,15 @@
             }
             [indentation replaceOccurrencesOfString:spacesToReplace withString:@"\t" options:0 range:NSMakeRange(0, indentation.length)];
         }
-        NSString *nextLine = [NSString stringWithFormat:@"%@UIColor *<#name#> = [UIColor colorWithRed:%f green:%f blue:%f alpha:%f];", indentation, r, g, b, a];
+        
+        NSString *nextLine = @"";
+        if ([invocation.buffer.contentUTI isEqualToString:@"public.objective-c-source"]) {
+            nextLine = [NSString stringWithFormat:@"%@UIColor *<#name#> = [UIColor colorWithRed:%f green:%f blue:%f alpha:%f];", indentation, r, g, b, a];
+        } else if ([invocation.buffer.contentUTI isEqualToString:@"public.swift-source"]) {
+            nextLine = [NSString stringWithFormat:@"%@let <#name#> = UIColor(red: %f, green: %f, blue: %f, alpha: %f)", indentation, r, g, b, a];
+        } else {
+            error = [NSError errorWithDomain:@"WrongLanguage" code:1001 userInfo:@{NSLocalizedDescriptionKey: @"This functionality only supports Objctive-C or Swift."}];
+        }
         [buffer.lines insertObject:nextLine atIndex:lineNumber+1];
     }
     
