@@ -40,6 +40,14 @@
 					<key>XCSourceEditorCommandClassName</key>
 					<string>SourceEditorCommand</string>
 					<key>XCSourceEditorCommandIdentifier</key>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).DublicateLine</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Dublicate Line (ObjC and Swift)</string>
+				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).DublicateLineAndReplaceStrings</string>
 					<key>XCSourceEditorCommandName</key>
 					<string>Dublicate Line and Replace Strings (ObjC)</string>
@@ -59,6 +67,14 @@
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).HexToUIColor</string>
 					<key>XCSourceEditorCommandName</key>
 					<string>Hex to UIColor (ObjC and Swift)</string>
+				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).IgnoreCompilerWarnings</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Ignore Compiler Warnings (ObjC)</string>
 				</dict>
 			</array>
 			<key>XCSourceEditorExtensionPrincipalClass</key>

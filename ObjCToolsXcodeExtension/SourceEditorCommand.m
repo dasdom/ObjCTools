@@ -25,23 +25,26 @@
         } else {
             error = [NSError errorWithDomain:@"WrongLanguage" code:1001 userInfo:@{NSLocalizedDescriptionKey: @"This functionality only supports Objctive-C."}];
         }
-    } else if ([invocation.commandIdentifier isEqualToString:@"de.dasdom.ObjCTools.ObjCToolsXcodeExtension.DublicateLineAndReplaceStrings"]) {
+    } else if ([invocation.commandIdentifier isEqualToString:@"de.dasdom.ObjCTools.ObjCToolsXcodeExtension.DublicateLineAndReplaceStrings"] ||
+               [invocation.commandIdentifier isEqualToString:@"de.dasdom.ObjCTools.ObjCToolsXcodeExtension.DublicateLine"]) {
         
-        if ([invocation.buffer.contentUTI isEqualToString:@"public.objective-c-source"]) {
+        if ([invocation.commandIdentifier isEqualToString:@"de.dasdom.ObjCTools.ObjCToolsXcodeExtension.DublicateLineAndReplaceStrings"]) {
             
-            line = [line stringByReplacingOccurrencesOfString:@"@\"" withString:@"<#"];
-            line = [line stringByReplacingOccurrencesOfString:@"\"" withString:@"#>\""];
-            line = [line stringByReplacingOccurrencesOfString:@"<#" withString:@"@\"<#"];
-            
-            //        if ([line containsString:@"="]) {
-            //            NSArray *components = [line componentsSeparatedByString:@"="];
-            //            NSString *firstComponent = components.firstObject;
-            //            NSRange range =
-            //        }
-            [buffer.lines insertObject:line atIndex:lineNumber+1];
-        } else {
-            error = [NSError errorWithDomain:@"WrongLanguage" code:1001 userInfo:@{NSLocalizedDescriptionKey: @"This functionality only supports Objctive-C."}];
+            if ([invocation.buffer.contentUTI isEqualToString:@"public.objective-c-source"]) {
+                
+                line = [line stringByReplacingOccurrencesOfString:@"@\"" withString:@"<#"];
+                line = [line stringByReplacingOccurrencesOfString:@"\"" withString:@"#>\""];
+                line = [line stringByReplacingOccurrencesOfString:@"<#" withString:@"@\"<#"];
+            }
         }
+        
+        //        if ([line containsString:@"="]) {
+        //            NSArray *components = [line componentsSeparatedByString:@"="];
+        //            NSString *firstComponent = components.firstObject;
+        //            NSRange range =
+        //        }
+        [buffer.lines insertObject:line atIndex:lineNumber+1];
+        
     } else if ([invocation.commandIdentifier isEqualToString:@"de.dasdom.ObjCTools.ObjCToolsXcodeExtension.SortImportsAndRemoveDuplicates"]) {
         
         __block NSInteger firstImport = 0;
@@ -66,7 +69,7 @@
     } else if ([invocation.commandIdentifier isEqualToString:@"de.dasdom.ObjCTools.ObjCToolsXcodeExtension.HexToUIColor"]) {
         
         NSString *string = [line substringWithRange:NSMakeRange(firstSelection.start.column, firstSelection.end.column-firstSelection.start.column)];
-
+        
         NSScanner *scanner = [NSScanner scannerWithString:string];
         scanner.charactersToBeSkipped = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
         
@@ -109,6 +112,11 @@
             error = [NSError errorWithDomain:@"WrongLanguage" code:1001 userInfo:@{NSLocalizedDescriptionKey: @"This functionality only supports Objctive-C or Swift."}];
         }
         [buffer.lines insertObject:nextLine atIndex:lineNumber+1];
+        
+    } else if ([invocation.commandIdentifier isEqualToString:@"de.dasdom.ObjCTools.ObjCToolsXcodeExtension.IgnoreCompilerWarnings"]) {
+    
+        [buffer.lines insertObject:[NSString stringWithFormat:@"#pragma clang diagnostic pop"] atIndex:lineNumber+1];
+        [buffer.lines insertObject:[NSString stringWithFormat:@"#pragma clang diagnostic push\n#pragma clang diagnostic ignored \"-Wgnu\""] atIndex:lineNumber];
     }
     
     completionHandler(error);
