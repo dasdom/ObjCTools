@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F25194B8210C4D85000DE64C"
-               BuildableName = "ObjC Tools.appex"
+               BuildableName = "Source Tools.appex"
                BlueprintName = "ObjCToolsXcodeExtension"
                ReferencedContainer = "container:ObjCTools.xcodeproj">
             </BuildableReference>
@@ -44,13 +44,23 @@
       language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F2264AA3211F420E00B9E55C"
+               BuildableName = "ToolsHelperTests.xctest"
+               BlueprintName = "ToolsHelperTests"
+               ReferencedContainer = "container:ObjCTools.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F25194B8210C4D85000DE64C"
-            BuildableName = "ObjC Tools.appex"
-            BlueprintName = "ObjCToolsXcodeExtension"
+            BlueprintIdentifier = "F251949D210C4D4F000DE64C"
+            BuildableName = "ObjCTools.app"
+            BlueprintName = "ObjCTools"
             ReferencedContainer = "container:ObjCTools.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

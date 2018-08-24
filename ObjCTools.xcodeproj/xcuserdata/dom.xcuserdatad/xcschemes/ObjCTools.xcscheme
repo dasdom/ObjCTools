@@ -29,6 +29,16 @@
       language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F2264AA3211F420E00B9E55C"
+               BuildableName = "ToolsHelperTests.xctest"
+               BlueprintName = "ToolsHelperTests"
+               ReferencedContainer = "container:ObjCTools.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
