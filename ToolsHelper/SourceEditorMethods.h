@@ -6,7 +6,7 @@
 
 @interface SourceEditorMethods : NSObject
 + (void)addImportStatementFromSelectedString:(NSString *)selectedString toLines:(NSMutableArray<NSString *> *)lines;
-+ (void)dublicateLine:(NSString *)line lineNumber:(NSInteger)lineNumber inLines:(NSMutableArray<NSString *> *)lines replaceObjCStrings:(BOOL)replaceObjCStrings;
++ (void)dublicateLine:(NSString *)line lineNumber:(NSInteger)lineNumber inLines:(NSMutableArray<NSString *> *)lines replaceStrings:(BOOL)replaceStrings;
 + (void)sortImportsAndRemoveDublicatesInLines:(NSMutableArray<NSString *> *)lines;
 + (void)hexToUIColorFromSelectedString:(NSString *)selectedString lineNumber:(NSInteger)lineNumber inLines:(NSMutableArray<NSString *> *)lines indentation:(NSString *)indentation contentUTI:(NSString *)contentUTI;
 + (void)ignoreCompilerWarningsAtLineNumber:(NSInteger)lineNumber inLines:(NSMutableArray<NSString *> *)lines;

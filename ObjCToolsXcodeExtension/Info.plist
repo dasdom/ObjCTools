@@ -50,7 +50,7 @@
 					<key>XCSourceEditorCommandIdentifier</key>
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).DublicateLineAndReplaceStrings</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>Dublicate Line and Replace Strings (ObjC)</string>
+					<string>Dublicate Line and Replace First String (ObjC and Swift)</string>
 				</dict>
 				<dict>
 					<key>XCSourceEditorCommandClassName</key>

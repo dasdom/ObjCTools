@@ -68,26 +68,35 @@
     }
 }
 
-+ (void)dublicateLine:(NSString *)line lineNumber:(NSInteger)lineNumber inLines:(NSMutableArray<NSString *> *)lines replaceObjCStrings:(BOOL)replaceObjCStrings {
++ (void)dublicateLine:(NSString *)line lineNumber:(NSInteger)lineNumber inLines:(NSMutableArray<NSString *> *)lines replaceStrings:(BOOL)replaceStrings {
     
-    if (replaceObjCStrings) {
+    if (replaceStrings) {
         
-        line = [line stringByReplacingOccurrencesOfString:@"@\"" withString:@"<#"];
-        line = [line stringByReplacingOccurrencesOfString:@"\"" withString:@"#>\""];
-        line = [line stringByReplacingOccurrencesOfString:@"<#" withString:@"@\"<#"];
+        NSError *error = nil;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\".*\"" options:NSRegularExpressionCaseInsensitive error:&error];
+        
+        NSRange range = NSMakeRange(NSNotFound, 0);
+//        do {
+            range = [regex rangeOfFirstMatchInString:line options:0 range:NSMakeRange(0, line.length)];
+            if (range.location != NSNotFound) {
+                line = [line stringByReplacingCharactersInRange:range withString:@"__ddh_replace_this_ddh__"];
+            }
+//        } while (range.location != NSNotFound);
+        
+        line = [line stringByReplacingOccurrencesOfString:@"__ddh_replace_this_ddh__" withString:@"\"<#string#>\""];
     }
 
     [lines insertObject:line atIndex:lineNumber+1];
 }
 
 + (void)sortImportsAndRemoveDublicatesInLines:(NSMutableArray<NSString *> *)lines {
-    __block NSInteger firstImport = 0;
+    __block NSInteger firstImport = -1;
     __block NSMutableSet<NSString *> *allImportsSet = [[NSMutableSet alloc] init];
     [lines enumerateObjectsWithOptions:0 usingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         if ([obj containsString:@"import "]) {
             [allImportsSet addObject:obj];
-            if (firstImport < 1) {
+            if (firstImport < 0) {
                 firstImport = idx;
             }
         }
@@ -131,9 +140,9 @@
     
     NSString *nextLine = @"";
     if (isObjC) {
-        nextLine = [NSString stringWithFormat:@"%@UIColor *<#name#> = [UIColor colorWithRed:%f green:%f blue:%f alpha:%f];", indentation, r, g, b, a];
+        nextLine = [NSString stringWithFormat:@"%@UIColor *<#name#> = [UIColor colorWithRed:%.3f green:%.3f blue:%.3f alpha:%.3f];", indentation, r, g, b, a];
     } else if (isSwift) {
-        nextLine = [NSString stringWithFormat:@"%@let <#name#> = UIColor(red: %f, green: %f, blue: %f, alpha: %f)", indentation, r, g, b, a];
+        nextLine = [NSString stringWithFormat:@"%@let <#name#> = UIColor(red: %.3f, green: %.3f, blue: %.3f, alpha: %.3f)", indentation, r, g, b, a];
     }
     [lines insertObject:nextLine atIndex:lineNumber+1];
 }

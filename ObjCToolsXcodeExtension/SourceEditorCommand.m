@@ -34,9 +34,9 @@
     } else if ([identifier containsString:@".DublicateLineAndReplaceStrings"] ||
                [identifier containsString:@".DublicateLine"]) {
         
-        BOOL replaceObjCStrings = [identifier containsString:@".DublicateLineAndReplaceStrings"] && isObjC;
+        BOOL replaceStrings = [identifier containsString:@".DublicateLineAndReplaceStrings"];
         
-        [SourceEditorMethods dublicateLine:line lineNumber:lineNumber inLines:buffer.lines replaceObjCStrings:replaceObjCStrings];
+        [SourceEditorMethods dublicateLine:line lineNumber:lineNumber inLines:buffer.lines replaceStrings:replaceStrings];
         
     } else if ([identifier containsString:@".SortImportsAndRemoveDuplicates"]) {
         
