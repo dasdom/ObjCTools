@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		F2264AA5211F420E00B9E55C /* ToolsHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2264A9C211F420D00B9E55C /* ToolsHelper.framework */; };
-		F2264AAC211F420E00B9E55C /* ToolsHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2264AAB211F420E00B9E55C /* ToolsHelperTests.m */; };
 		F2264AAE211F420E00B9E55C /* ToolsHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F2264A9E211F420E00B9E55C /* ToolsHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F2264AB1211F420E00B9E55C /* ToolsHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2264A9C211F420D00B9E55C /* ToolsHelper.framework */; };
 		F2264AB2211F420E00B9E55C /* ToolsHelper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2264A9C211F420D00B9E55C /* ToolsHelper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -89,7 +88,6 @@
 		F2264A9E211F420E00B9E55C /* ToolsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToolsHelper.h; sourceTree = "<group>"; };
 		F2264A9F211F420E00B9E55C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F2264AA4211F420E00B9E55C /* ToolsHelperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToolsHelperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F2264AAB211F420E00B9E55C /* ToolsHelperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToolsHelperTests.m; sourceTree = "<group>"; };
 		F2264AAD211F420E00B9E55C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F2264ABA211F423600B9E55C /* SourceEditorMethods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SourceEditorMethods.h; sourceTree = "<group>"; };
 		F2264ABB211F423600B9E55C /* SourceEditorMethods.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceEditorMethods.m; sourceTree = "<group>"; };
@@ -166,7 +164,6 @@
 		F2264AAA211F420E00B9E55C /* ToolsHelperTests */ = {
 			isa = PBXGroup;
 			children = (
-				F2264AAB211F420E00B9E55C /* ToolsHelperTests.m */,
 				F2264ABF2120502B00B9E55C /* SourceEditorMethodsTests.m */,
 				F2264AAD211F420E00B9E55C /* Info.plist */,
 			);
@@ -421,7 +418,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2264AC02120502B00B9E55C /* SourceEditorMethodsTests.m in Sources */,
-				F2264AAC211F420E00B9E55C /* ToolsHelperTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
