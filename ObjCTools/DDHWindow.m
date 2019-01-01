@@ -9,5 +9,7 @@
 #import "DDHWindow.h"
 
 @implementation DDHWindow
-
+- (void)close {
+  [NSApp terminate:nil];
+}
 @end

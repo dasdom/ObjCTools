@@ -39,8 +39,15 @@
         [SourceEditorMethods dublicateLine:line lineNumber:lineNumber inLines:buffer.lines replaceStrings:replaceStrings];
         
     } else if ([identifier containsString:@".SortImportsAndRemoveDuplicates"]) {
-        
+      
+        NSInteger numberOfLinesBefore = [buffer.lines count];
         [SourceEditorMethods sortImportsAndRemoveDublicatesInLines:buffer.lines];
+        
+        NSInteger numberOfLinesAfter = [buffer.lines count];
+        
+        if (numberOfLinesBefore == numberOfLinesAfter) {
+            error = [NSError errorWithDomain:@"NoChanges" code:1002 userInfo:@{NSLocalizedDescriptionKey: @"Nothing to add or remove."}];
+        }
         
     } else if ([identifier containsString:@".HexToUIColor"]) {
         
@@ -61,11 +68,15 @@
         if (isObjC || isSwift) {
             [SourceEditorMethods hexToUIColorFromSelectedString:string lineNumber:lineNumber inLines:buffer.lines indentation:indentation contentUTI:invocation.buffer.contentUTI];
         }
-        
-    } else if ([identifier containsString:@".IgnoreCompilerWarnings"]) {
+    } else if ([identifier containsString:@".CopyDeclarationToClipboard"]) {
         
         if (isObjC) {
-            [SourceEditorMethods ignoreCompilerWarningsAtLineNumber:lineNumber inLines:buffer.lines];
+            NSArray<NSString *> *lines = [buffer.lines subarrayWithRange:NSMakeRange(selections.firstObject.start.line, selections.firstObject.end.line-selections.firstObject.start.line)];
+            
+            NSString *declarations = [SourceEditorMethods declarationForStrings:lines];
+            
+            [[NSPasteboard generalPasteboard] clearContents];
+            [[NSPasteboard generalPasteboard] setString:declarations forType:NSStringPboardType];
         } else {
             error = [NSError errorWithDomain:@"WrongLanguage" code:1001 userInfo:@{NSLocalizedDescriptionKey: @"This functionality only supports Objctive-C."}];
         }

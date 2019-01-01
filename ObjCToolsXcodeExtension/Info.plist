@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2</string>
+	<string>1.3</string>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>6</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSExtension</key>
@@ -42,7 +42,7 @@
 					<key>XCSourceEditorCommandIdentifier</key>
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).DublicateLine</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>Dublicate Line (ObjC and Swift)</string>
+					<string>Duplicate Line (ObjC and Swift)</string>
 				</dict>
 				<dict>
 					<key>XCSourceEditorCommandClassName</key>
@@ -50,7 +50,7 @@
 					<key>XCSourceEditorCommandIdentifier</key>
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).DublicateLineAndReplaceStrings</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>Dublicate Line and Replace First String (ObjC and Swift)</string>
+					<string>Duplicate Line and Replace First String (ObjC and Swift)</string>
 				</dict>
 				<dict>
 					<key>XCSourceEditorCommandClassName</key>
@@ -72,9 +72,9 @@
 					<key>XCSourceEditorCommandClassName</key>
 					<string>SourceEditorCommand</string>
 					<key>XCSourceEditorCommandIdentifier</key>
-					<string>$(PRODUCT_BUNDLE_IDENTIFIER).IgnoreCompilerWarnings</string>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).CopyDeclarationToClipboard</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>Ignore Compiler Warnings (ObjC)</string>
+					<string>Copy Declarations of Selected Methods to Clipboard (ObjC)</string>
 				</dict>
 			</array>
 			<key>XCSourceEditorExtensionPrincipalClass</key>

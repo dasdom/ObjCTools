@@ -142,4 +142,19 @@
     XCTAssertEqualObjects(lines[1], @"  let <#name#> = UIColor(red: 1.000, green: 0.627, blue: 0.016, alpha: 0.808)");
 }
 
+- (void)test_declarationForString_simple {
+    
+    NSString *result = [SourceEditorMethods declarationForStrings:@[@"- (void)foo {"]];
+    
+    XCTAssertEqualObjects(result, @"- (void)foo;");
+}
+
+- (void)test_declarationForString_multiline {
+    NSArray<NSString *> *input = @[@"- (void)foo {", @"    return;", @"}@", @"-(NSInteger)bar"];
+    
+    NSString *result = [SourceEditorMethods declarationForStrings:input];
+
+    XCTAssertEqualObjects(result, @"- (void)foo;\n-(NSInteger)bar;");
+}
+
 @end

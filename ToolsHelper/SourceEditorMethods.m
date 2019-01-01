@@ -147,10 +147,26 @@
     [lines insertObject:nextLine atIndex:lineNumber+1];
 }
 
-+ (void)ignoreCompilerWarningsAtLineNumber:(NSInteger)lineNumber inLines:(NSMutableArray<NSString *> *)lines {
++ (NSString *)declarationForStrings:(NSArray<NSString *> *)selectedLines {
+
+    NSMutableArray<NSString *> *declarationLines = [[NSMutableArray alloc] init];
     
-    [lines insertObject:[NSString stringWithFormat:@"#pragma clang diagnostic pop"] atIndex:lineNumber+1];
-    [lines insertObject:[NSString stringWithFormat:@"#pragma clang diagnostic push\n#pragma clang diagnostic ignored \"-Wgnu\""] atIndex:lineNumber];
+    [selectedLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        NSString *string = nil;
+        if ([obj hasPrefix:@"- ("] || [obj hasPrefix:@"-("] || [obj hasPrefix:@"+ ("] || [obj hasPrefix:@"+("]) {
+            string = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            if ([string hasSuffix:@"{"]) {
+                string = [string stringByReplacingCharactersInRange:NSMakeRange(string.length-1, 1) withString:@""];
+                string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            }
+            [declarationLines addObject:string];
+        }
+    }];
+
+    NSString *result = [declarationLines componentsJoinedByString:@";\n"];
+    
+    return [result stringByAppendingString:@";"];
 }
 
 @end
