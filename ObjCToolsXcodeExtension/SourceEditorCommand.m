@@ -40,15 +40,8 @@
         
     } else if ([identifier containsString:@".SortImportsAndRemoveDuplicates"]) {
       
-        NSInteger numberOfLinesBefore = [buffer.lines count];
         [SourceEditorMethods sortImportsAndRemoveDublicatesInLines:buffer.lines];
-        
-        NSInteger numberOfLinesAfter = [buffer.lines count];
-        
-        if (numberOfLinesBefore == numberOfLinesAfter) {
-            error = [NSError errorWithDomain:@"NoChanges" code:1002 userInfo:@{NSLocalizedDescriptionKey: @"Nothing to add or remove."}];
-        }
-        
+      
     } else if ([identifier containsString:@".HexToUIColor"]) {
         
         NSString *string = [line substringWithRange:NSMakeRange(firstSelection.start.column, firstSelection.end.column-firstSelection.start.column)];
