@@ -169,4 +169,34 @@
     return [result stringByAppendingString:@";"];
 }
 
++ (NSArray<NSString *> *)alignEquals:(NSArray<NSString *> *)selectedLines {
+    
+    __block NSInteger maxEqualPosition = 0;
+    [selectedLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+       
+        NSRange rangeOfEqual = [obj rangeOfString:@"="];
+        if (rangeOfEqual.location != NSNotFound &&
+            maxEqualPosition < rangeOfEqual.location) {
+            
+            maxEqualPosition = rangeOfEqual.location;
+        }
+    }];
+    
+    NSMutableArray<NSString *> *output = [[NSMutableArray alloc] init];
+    [selectedLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        NSRange rangeOfEqual = [obj rangeOfString:@"="];
+        NSInteger additionalSpaces = maxEqualPosition - rangeOfEqual.location;
+        NSMutableString *spaces = [[NSMutableString alloc] initWithString:@""];
+        for (int i = 0; i<additionalSpaces; i++) {
+            [spaces appendString:@" "];
+        }
+        NSString *stringToReplace = [NSString stringWithFormat:@"%@=", spaces];
+        
+        NSString *changedString = [obj stringByReplacingOccurrencesOfString:@"=" withString:stringToReplace];
+        [output addObject:changedString];
+    }];
+    return output;
+}
+
 @end

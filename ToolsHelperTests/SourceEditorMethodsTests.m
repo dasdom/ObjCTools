@@ -16,7 +16,7 @@
     [lines addObject:@"#import <Foundation/Foundation.h>"];
     [lines addObject:@"@implementation Bar"];
     [lines addObject:@"@end"];
-
+    
     [SourceEditorMethods addImportStatementFromSelectedString:@"Foobar" toLines:lines];
     
     XCTAssertEqualObjects(lines[1], @"#import \"Foobar.h\"");
@@ -90,7 +90,7 @@
     [lines addObject:@"#import \"Foo.h\""];
     [lines addObject:@"#import \"Foo.h\""];
     [lines addObject:@"#import \"Bar.h\""];
-
+    
     [SourceEditorMethods sortImportsAndRemoveDublicatesInLines:lines];
     
     XCTAssertEqual([lines count], 2);
@@ -153,8 +153,71 @@
     NSArray<NSString *> *input = @[@"- (void)foo {", @"    return;", @"}@", @"-(NSInteger)bar"];
     
     NSString *result = [SourceEditorMethods declarationForStrings:input];
-
+    
     XCTAssertEqualObjects(result, @"- (void)foo;\n-(NSInteger)bar;");
+}
+
+- (void)test_alignEquals2Lines {
+    NSArray<NSString *> *input =
+    @[
+      @"window.maxSize = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController = contentViewController;",
+      ];
+    
+    NSArray<NSString *> *result = [SourceEditorMethods alignEquals:input];
+    
+    NSArray<NSString *> *expectedResult =
+    @[
+      @"window.maxSize               = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController = contentViewController;",
+      ];
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+- (void)test_alignEquals5Lines {
+    NSArray<NSString *> *input =
+    @[
+      @"window.maxSize = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController = contentViewController;",
+      @"window.delegate = contentViewController;",
+      @"window.titleVisibility = NSWindowTitleHidden;",
+      @"window.tabbingMode = NSWindowTabbingModeDisallowed;",
+      ];
+    
+    NSArray<NSString *> *result = [SourceEditorMethods alignEquals:input];
+    
+    NSArray<NSString *> *expectedResult =
+    @[
+      @"window.maxSize               = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController = contentViewController;",
+      @"window.delegate              = contentViewController;",
+      @"window.titleVisibility       = NSWindowTitleHidden;",
+      @"window.tabbingMode           = NSWindowTabbingModeDisallowed;",
+      ];
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+- (void)test_alignEqualsWithInterceptedLine {
+    NSArray<NSString *> *input =
+    @[
+      @"window.maxSize = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController = contentViewController;",
+      @"[foo bar];",
+      @"window.titleVisibility = NSWindowTitleHidden;",
+      @"window.tabbingMode = NSWindowTabbingModeDisallowed;",
+      ];
+    
+    NSArray<NSString *> *result = [SourceEditorMethods alignEquals:input];
+    
+    NSArray<NSString *> *expectedResult =
+    @[
+      @"window.maxSize               = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController = contentViewController;",
+      @"[foo bar];",
+      @"window.titleVisibility       = NSWindowTitleHidden;",
+      @"window.tabbingMode           = NSWindowTabbingModeDisallowed;",
+      ];
+    XCTAssertEqualObjects(result, expectedResult);
 }
 
 @end

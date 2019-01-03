@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "0910"
+   wasCreatedForAppExtension = "YES"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +15,24 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F25194B8210C4D85000DE64C"
+               BuildableName = "Source Tools.appex"
+               BlueprintName = "SourceToolsXcodeExtension"
+               ReferencedContainer = "container:SourceTools.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "F251949D210C4D4F000DE64C"
-               BuildableName = "ObjCTools.app"
-               BlueprintName = "ObjCTools"
-               ReferencedContainer = "container:ObjCTools.xcodeproj">
+               BuildableName = "SourceTools.app"
+               BlueprintName = "SourceTools"
+               ReferencedContainer = "container:SourceTools.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -26,7 +41,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
@@ -36,7 +50,7 @@
                BlueprintIdentifier = "F2264AA3211F420E00B9E55C"
                BuildableName = "ToolsHelperTests.xctest"
                BlueprintName = "ToolsHelperTests"
-               ReferencedContainer = "container:ObjCTools.xcodeproj">
+               ReferencedContainer = "container:SourceTools.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -44,9 +58,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F251949D210C4D4F000DE64C"
-            BuildableName = "ObjCTools.app"
-            BlueprintName = "ObjCTools"
-            ReferencedContainer = "container:ObjCTools.xcodeproj">
+            BuildableName = "SourceTools.app"
+            BlueprintName = "SourceTools"
+            ReferencedContainer = "container:SourceTools.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -54,25 +68,28 @@
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
+      selectedDebuggerIdentifier = ""
+      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <PathRunnable
+         runnableDebuggingMode = "0"
+         BundleIdentifier = "com.apple.dt.Xcode"
+         FilePath = "/Applications/Xcode.app">
+      </PathRunnable>
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F251949D210C4D4F000DE64C"
-            BuildableName = "ObjCTools.app"
-            BlueprintName = "ObjCTools"
-            ReferencedContainer = "container:ObjCTools.xcodeproj">
+            BuildableName = "SourceTools.app"
+            BlueprintName = "SourceTools"
+            ReferencedContainer = "container:SourceTools.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -81,15 +98,16 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      debugDocumentVersioning = "YES">
+      debugDocumentVersioning = "YES"
+      launchAutomaticallySubstyle = "2">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F251949D210C4D4F000DE64C"
-            BuildableName = "ObjCTools.app"
-            BlueprintName = "ObjCTools"
-            ReferencedContainer = "container:ObjCTools.xcodeproj">
+            BuildableName = "SourceTools.app"
+            BlueprintName = "SourceTools"
+            ReferencedContainer = "container:SourceTools.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

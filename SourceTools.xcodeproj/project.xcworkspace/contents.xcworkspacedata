@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:ObjCTools.xcodeproj">
+      location = "self:/Users/dom/development/macOS/ObjCTools/SourceTools.xcodeproj">
    </FileRef>
 </Workspace>

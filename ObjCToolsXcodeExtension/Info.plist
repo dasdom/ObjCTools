@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.3.1</string>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>9</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSExtension</key>
@@ -75,6 +75,14 @@
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).CopyDeclarationToClipboard</string>
 					<key>XCSourceEditorCommandName</key>
 					<string>Copy Declarations of Selected Methods to Clipboard (ObjC)</string>
+				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).AlignEquals</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Align equals (ObjC and Swift)</string>
 				</dict>
 			</array>
 			<key>XCSourceEditorExtensionPrincipalClass</key>

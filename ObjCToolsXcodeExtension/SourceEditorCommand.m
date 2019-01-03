@@ -64,7 +64,7 @@
     } else if ([identifier containsString:@".CopyDeclarationToClipboard"]) {
         
         if (isObjC) {
-            NSArray<NSString *> *lines = [buffer.lines subarrayWithRange:NSMakeRange(selections.firstObject.start.line, selections.firstObject.end.line-selections.firstObject.start.line)];
+            NSArray<NSString *> *lines = [buffer.lines subarrayWithRange:NSMakeRange(selections.firstObject.start.line, selections.firstObject.end.line-selections.firstObject.start.line+1)];
             
             NSString *declarations = [SourceEditorMethods declarationForStrings:lines];
             
@@ -73,6 +73,14 @@
         } else {
             error = [NSError errorWithDomain:@"WrongLanguage" code:1001 userInfo:@{NSLocalizedDescriptionKey: @"This functionality only supports Objctive-C."}];
         }
+    } else if ([identifier containsString:@".AlignEquals"]) {
+        
+        NSRange subRange = NSMakeRange(selections.firstObject.start.line, selections.firstObject.end.line-selections.firstObject.start.line+1);
+        NSArray<NSString *> *lines = [buffer.lines subarrayWithRange:subRange];
+        
+        NSArray<NSString *> *changedLines = [SourceEditorMethods alignEquals:lines];
+        
+        [buffer.lines replaceObjectsInRange:subRange withObjectsFromArray:changedLines];
     }
     
     completionHandler(error);

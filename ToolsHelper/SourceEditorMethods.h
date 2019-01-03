@@ -10,4 +10,5 @@
 + (void)sortImportsAndRemoveDublicatesInLines:(NSMutableArray<NSString *> *)lines;
 + (void)hexToUIColorFromSelectedString:(NSString *)selectedString lineNumber:(NSInteger)lineNumber inLines:(NSMutableArray<NSString *> *)lines indentation:(NSString *)indentation contentUTI:(NSString *)contentUTI;
 + (NSString *)declarationForStrings:(NSArray<NSString *> *)selectedLines;
++ (NSArray<NSString *> *)alignEquals:(NSArray<NSString *> *)selectedLines;
 @end

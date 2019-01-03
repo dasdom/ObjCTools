@@ -94,7 +94,7 @@
 		F2264ABF2120502B00B9E55C /* SourceEditorMethodsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceEditorMethodsTests.m; sourceTree = "<group>"; };
 		F2403602210EFDF3005080F8 /* DDHWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHWindow.h; sourceTree = "<group>"; };
 		F2403603210EFDF3005080F8 /* DDHWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHWindow.m; sourceTree = "<group>"; };
-		F251949E210C4D4F000DE64C /* ObjCTools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ObjCTools.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F251949E210C4D4F000DE64C /* SourceTools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SourceTools.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F25194A1210C4D4F000DE64C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F25194A2210C4D4F000DE64C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F25194A4210C4D4F000DE64C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -185,7 +185,7 @@
 		F251949F210C4D4F000DE64C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F251949E210C4D4F000DE64C /* ObjCTools.app */,
+				F251949E210C4D4F000DE64C /* SourceTools.app */,
 				F25194B9210C4D85000DE64C /* Source Tools.appex */,
 				F2264A9C211F420D00B9E55C /* ToolsHelper.framework */,
 				F2264AA4211F420E00B9E55C /* ToolsHelperTests.xctest */,
@@ -284,9 +284,9 @@
 			productReference = F2264AA4211F420E00B9E55C /* ToolsHelperTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F251949D210C4D4F000DE64C /* ObjCTools */ = {
+		F251949D210C4D4F000DE64C /* SourceTools */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F25194B2210C4D4F000DE64C /* Build configuration list for PBXNativeTarget "ObjCTools" */;
+			buildConfigurationList = F25194B2210C4D4F000DE64C /* Build configuration list for PBXNativeTarget "SourceTools" */;
 			buildPhases = (
 				F251949A210C4D4F000DE64C /* Sources */,
 				F251949B210C4D4F000DE64C /* Frameworks */,
@@ -300,14 +300,14 @@
 				F25194C7210C4D86000DE64C /* PBXTargetDependency */,
 				F2264AB0211F420E00B9E55C /* PBXTargetDependency */,
 			);
-			name = ObjCTools;
+			name = SourceTools;
 			productName = ObjCTools;
-			productReference = F251949E210C4D4F000DE64C /* ObjCTools.app */;
+			productReference = F251949E210C4D4F000DE64C /* SourceTools.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F25194B8210C4D85000DE64C /* ObjCToolsXcodeExtension */ = {
+		F25194B8210C4D85000DE64C /* SourceToolsXcodeExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F25194C9210C4D86000DE64C /* Build configuration list for PBXNativeTarget "ObjCToolsXcodeExtension" */;
+			buildConfigurationList = F25194C9210C4D86000DE64C /* Build configuration list for PBXNativeTarget "SourceToolsXcodeExtension" */;
 			buildPhases = (
 				F25194B5210C4D85000DE64C /* Sources */,
 				F25194B6210C4D85000DE64C /* Frameworks */,
@@ -317,7 +317,7 @@
 			);
 			dependencies = (
 			);
-			name = ObjCToolsXcodeExtension;
+			name = SourceToolsXcodeExtension;
 			productName = ObjCToolsXcodeExtension;
 			productReference = F25194B9210C4D85000DE64C /* Source Tools.appex */;
 			productType = "com.apple.product-type.xcode-extension";
@@ -350,7 +350,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F2519499210C4D4F000DE64C /* Build configuration list for PBXProject "ObjCTools" */;
+			buildConfigurationList = F2519499210C4D4F000DE64C /* Build configuration list for PBXProject "SourceTools" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -363,8 +363,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F251949D210C4D4F000DE64C /* ObjCTools */,
-				F25194B8210C4D85000DE64C /* ObjCToolsXcodeExtension */,
+				F251949D210C4D4F000DE64C /* SourceTools */,
+				F25194B8210C4D85000DE64C /* SourceToolsXcodeExtension */,
 				F2264A9B211F420D00B9E55C /* ToolsHelper */,
 				F2264AA3211F420E00B9E55C /* ToolsHelperTests */,
 			);
@@ -451,7 +451,7 @@
 		};
 		F2264AA9211F420E00B9E55C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F251949D210C4D4F000DE64C /* ObjCTools */;
+			target = F251949D210C4D4F000DE64C /* SourceTools */;
 			targetProxy = F2264AA8211F420E00B9E55C /* PBXContainerItemProxy */;
 		};
 		F2264AB0211F420E00B9E55C /* PBXTargetDependency */ = {
@@ -461,7 +461,7 @@
 		};
 		F25194C7210C4D86000DE64C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F25194B8210C4D85000DE64C /* ObjCToolsXcodeExtension */;
+			target = F25194B8210C4D85000DE64C /* SourceToolsXcodeExtension */;
 			targetProxy = F25194C6210C4D86000DE64C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -536,7 +536,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = de.dasdom.ToolsHelperTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ObjCTools.app/Contents/MacOS/ObjCTools";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SourceTools.app/Contents/MacOS/SourceTools";
 			};
 			name = Debug;
 		};
@@ -550,7 +550,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = de.dasdom.ToolsHelperTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ObjCTools.app/Contents/MacOS/ObjCTools";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SourceTools.app/Contents/MacOS/SourceTools";
 			};
 			name = Release;
 		};
@@ -738,7 +738,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F2519499210C4D4F000DE64C /* Build configuration list for PBXProject "ObjCTools" */ = {
+		F2519499210C4D4F000DE64C /* Build configuration list for PBXProject "SourceTools" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F25194B0210C4D4F000DE64C /* Debug */,
@@ -747,7 +747,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F25194B2210C4D4F000DE64C /* Build configuration list for PBXNativeTarget "ObjCTools" */ = {
+		F25194B2210C4D4F000DE64C /* Build configuration list for PBXNativeTarget "SourceTools" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F25194B3210C4D4F000DE64C /* Debug */,
@@ -756,7 +756,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F25194C9210C4D86000DE64C /* Build configuration list for PBXNativeTarget "ObjCToolsXcodeExtension" */ = {
+		F25194C9210C4D86000DE64C /* Build configuration list for PBXNativeTarget "SourceToolsXcodeExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F25194CA210C4D86000DE64C /* Debug */,
