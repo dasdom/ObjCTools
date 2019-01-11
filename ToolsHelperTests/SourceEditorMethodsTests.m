@@ -44,6 +44,53 @@
     XCTAssertEqualObjects(lines[1], @"");
 }
 
+- (void)test_addClassDeclaration_1 {
+    NSMutableArray *lines = [NSMutableArray new];
+    [lines addObject:@"#import <Foundation/Foundation.h>"];
+    [lines addObject:@"@implementation Bar"];
+    [lines addObject:@"@end"];
+    
+    [SourceEditorMethods addClassDeclarationFromSelectedString:@"Foobar" toLines:lines];
+    
+    XCTAssertEqualObjects(lines[1], @"");
+    XCTAssertEqualObjects(lines[2], @"@class Foobar;");
+}
+
+- (void)test_addClassDeclaration_2 {
+    NSMutableArray *lines = [NSMutableArray new];
+    [lines addObject:@"#import <Foundation/Foundation.h>"];
+    [lines addObject:@"@class Bar;"];
+    [lines addObject:@"@implementation Bar"];
+    [lines addObject:@"@end"];
+    
+    [SourceEditorMethods addClassDeclarationFromSelectedString:@"Foobar" toLines:lines];
+    
+    XCTAssertEqualObjects(lines[1], @"@class Bar;");
+    XCTAssertEqualObjects(lines[2], @"@class Foobar;");
+}
+
+- (void)test_addClassDeclaration_3 {
+    NSMutableArray *lines = [NSMutableArray new];
+    [lines addObject:@"@implementation Bar"];
+    [lines addObject:@"@end"];
+    
+    [SourceEditorMethods addClassDeclarationFromSelectedString:@"Foobar" toLines:lines];
+    
+    XCTAssertEqualObjects(lines[0], @"@class Foobar;");
+    XCTAssertEqualObjects(lines[1], @"");
+}
+
+- (void)test_addClassDeclaration_4 {
+    NSMutableArray *lines = [NSMutableArray new];
+    [lines addObject:@"@interface Bar"];
+    [lines addObject:@"@end"];
+    
+    [SourceEditorMethods addClassDeclarationFromSelectedString:@"Foobar" toLines:lines];
+    
+    XCTAssertEqualObjects(lines[0], @"@class Foobar;");
+    XCTAssertEqualObjects(lines[1], @"");
+}
+
 - (void)test_dublicateLine_1 {
     NSMutableArray *lines = [NSMutableArray new];
     [lines addObject:@"Foo"];
@@ -174,6 +221,23 @@
     XCTAssertEqualObjects(result, expectedResult);
 }
 
+- (void)test_alignEquals2Lines_2 {
+    NSArray<NSString *> *input =
+    @[
+      @"window.maxSize                   = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController     = contentViewController;",
+      ];
+    
+    NSArray<NSString *> *result = [SourceEditorMethods alignEquals:input];
+    
+    NSArray<NSString *> *expectedResult =
+    @[
+      @"window.maxSize               = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController = contentViewController;",
+      ];
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
 - (void)test_alignEquals5Lines {
     NSArray<NSString *> *input =
     @[
@@ -217,6 +281,57 @@
       @"window.titleVisibility       = NSWindowTitleHidden;",
       @"window.tabbingMode           = NSWindowTabbingModeDisallowed;",
       ];
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+- (void)test_sortSelectedLines_alreadySorted {
+    NSArray<NSString *> *input =
+    @[
+      @"a",
+      @"b"
+      ];
+    
+    NSArray<NSString *> *result = [SourceEditorMethods sortSelectedLines:input];
+    
+    NSArray<NSString *> *expectedResult =
+    @[
+      @"a",
+      @"b"
+      ];
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+- (void)test_sortSelectedLines {
+    NSArray<NSString *> *input =
+    @[
+      @"a",
+      @"c",
+      @"b"
+      ];
+    
+    NSArray<NSString *> *result = [SourceEditorMethods sortSelectedLines:input];
+    
+    NSArray<NSString *> *expectedResult =
+    @[
+      @"a",
+      @"b",
+      @"c"
+      ];
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+- (void)test_protocolFromSelectedMethods {
+    NSArray<NSString *> *input =
+    @[
+      @"+ (void)foo {",
+      @"    return;",
+      @"}@",
+      @"-(NSInteger)bar"
+      ];
+    
+    NSString *result = [SourceEditorMethods protocolFromMethodsInLines:input];
+
+    NSString *expectedResult = @"@protocol <#Protocol Name#> <NSObject>\n+ (void)foo;\n-(NSInteger)bar;\n@end\n";
     XCTAssertEqualObjects(result, expectedResult);
 }
 

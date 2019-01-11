@@ -68,6 +68,85 @@
     }
 }
 
++ (void)addClassDeclarationFromSelectedString:(NSString *)selectedString toLines:(NSMutableArray<NSString *> *)lines {
+    
+    __block NSInteger lastClassDeclaration = -1;
+    __block NSMutableArray<NSString *> *allClassDeclarations = [[NSMutableArray alloc] init];
+    [lines enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        if ([obj containsString:@"@class"]) {
+            [allClassDeclarations addObject:obj];
+            if (lastClassDeclaration < 0) {
+                lastClassDeclaration = idx;
+            }
+        }
+    }];
+    
+    if (lastClassDeclaration < 0) {
+        [lines enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            if ([obj containsString:@"#import"]) {
+                if (lastClassDeclaration < 1) {
+                    lastClassDeclaration = idx;
+                }
+            }
+        }];
+    }
+    
+    __block BOOL addEmptyLineBefore = true;
+    __block BOOL addEmptyLineAfter = false;
+    if (lastClassDeclaration < 0) {
+        [lines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+
+            if ([obj containsString:@"@interface"]) {
+                lastClassDeclaration = idx - 1;
+                addEmptyLineBefore = false;
+                addEmptyLineAfter = true;
+                *stop = true;
+            }
+        }];
+    }
+
+    if (lastClassDeclaration < 0) {
+        [lines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+
+            if ([obj containsString:@"@implementation"]) {
+                lastClassDeclaration = idx - 1;
+                addEmptyLineBefore = false;
+                addEmptyLineAfter = true;
+                *stop = true;
+            }
+        }];
+    }
+    
+    if (selectedString.length > 0) {
+        NSString *classDeclarationLine = [NSString stringWithFormat:@"@class %@;", selectedString];
+        
+        BOOL alreadyAdded = false;
+        for (NSString *classDeclaration in allClassDeclarations) {
+            if ([classDeclaration containsString:classDeclarationLine]) {
+                alreadyAdded = true;
+                break;
+            }
+        }
+        
+        if (!alreadyAdded) {
+            NSInteger index = lastClassDeclaration+1;
+            if ([allClassDeclarations count] < 1 && addEmptyLineBefore) {
+                [lines insertObject:@"" atIndex:index];
+                index += 1;
+            }
+            [lines insertObject:classDeclarationLine atIndex:index];
+            index += 1;
+            if (addEmptyLineAfter) {
+                [lines insertObject:@"" atIndex:index];
+            }
+        }
+        
+        
+    }
+}
+
 + (void)dublicateLine:(NSString *)line lineNumber:(NSInteger)lineNumber inLines:(NSMutableArray<NSString *> *)lines replaceStrings:(BOOL)replaceStrings {
     
     if (replaceStrings) {
@@ -171,8 +250,24 @@
 
 + (NSArray<NSString *> *)alignEquals:(NSArray<NSString *> *)selectedLines {
     
-    __block NSInteger maxEqualPosition = 0;
+    // regex: @" += +"
+    
+    NSMutableArray<NSString *> *normalized = [[NSMutableArray alloc] init];
     [selectedLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+       
+        NSError *error = nil;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@" += +" options:NSRegularExpressionCaseInsensitive error:&error];
+        
+        NSRange range = NSMakeRange(NSNotFound, 0);
+        range = [regex rangeOfFirstMatchInString:obj options:0 range:NSMakeRange(0, obj.length)];
+        if (range.location != NSNotFound) {
+            obj = [obj stringByReplacingCharactersInRange:range withString:@" = "];
+        }
+        [normalized addObject:obj];
+    }];
+    
+    __block NSInteger maxEqualPosition = 0;
+    [normalized enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
        
         NSRange rangeOfEqual = [obj rangeOfString:@"="];
         if (rangeOfEqual.location != NSNotFound &&
@@ -183,7 +278,7 @@
     }];
     
     NSMutableArray<NSString *> *output = [[NSMutableArray alloc] init];
-    [selectedLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [normalized enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSRange rangeOfEqual = [obj rangeOfString:@"="];
         NSInteger additionalSpaces = maxEqualPosition - rangeOfEqual.location;
@@ -197,6 +292,32 @@
         [output addObject:changedString];
     }];
     return output;
+}
+
++ (NSArray<NSString *> *)sortSelectedLines:(NSArray<NSString *> *)selectedLines {
+    return [selectedLines sortedArrayUsingSelector:@selector(compare:)];
+}
+
++ (NSString *)protocolFromMethodsInLines:(NSArray<NSString *> *)selectedLines {
+
+    NSMutableArray<NSString *> *declarationLines = [[NSMutableArray alloc] init];
+    
+    [selectedLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        NSString *string = nil;
+        if ([obj hasPrefix:@"- ("] || [obj hasPrefix:@"-("] || [obj hasPrefix:@"+ ("] || [obj hasPrefix:@"+("]) {
+            string = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            if ([string hasSuffix:@"{"]) {
+                string = [string stringByReplacingCharactersInRange:NSMakeRange(string.length-1, 1) withString:@""];
+                string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            }
+            [declarationLines addObject:string];
+        }
+    }];
+    
+    NSString *result = [declarationLines componentsJoinedByString:@";\n"];
+
+    return [NSString stringWithFormat:@"@protocol <#Protocol Name#> <NSObject>\n%@;\n@end\n", result];
 }
 
 @end
