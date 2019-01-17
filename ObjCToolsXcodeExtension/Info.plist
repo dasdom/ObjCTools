@@ -98,7 +98,7 @@
 					<key>XCSourceEditorCommandIdentifier</key>
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).CopyProtocolDeclarationToClipboard</string>
 					<key>XCSourceEditorCommandName</key>
-					<string>Copy Protocol Declarations For Selected Methods To Clipboard (ObjC)</string>
+					<string>Copy Protocol Declarations For Selected Methods To Clipboard (ObjC and Swift)</string>
 				</dict>
 			</array>
 			<key>XCSourceEditorExtensionPrincipalClass</key>

@@ -20,10 +20,10 @@
         }
     }];
     
-//    if (lastImport == 0) {
-//        [lines ]
-//    }
-//
+    //    if (lastImport == 0) {
+    //        [lines ]
+    //    }
+    //
     
     __block BOOL addEmptyLine = false;
     if (lastImport < 0) {
@@ -97,7 +97,7 @@
     __block BOOL addEmptyLineAfter = false;
     if (lastClassDeclaration < 0) {
         [lines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-
+            
             if ([obj containsString:@"@interface"]) {
                 lastClassDeclaration = idx - 1;
                 addEmptyLineBefore = false;
@@ -106,10 +106,10 @@
             }
         }];
     }
-
+    
     if (lastClassDeclaration < 0) {
         [lines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-
+            
             if ([obj containsString:@"@implementation"]) {
                 lastClassDeclaration = idx - 1;
                 addEmptyLineBefore = false;
@@ -155,16 +155,16 @@
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\".*\"" options:NSRegularExpressionCaseInsensitive error:&error];
         
         NSRange range = NSMakeRange(NSNotFound, 0);
-//        do {
-            range = [regex rangeOfFirstMatchInString:line options:0 range:NSMakeRange(0, line.length)];
-            if (range.location != NSNotFound) {
-                line = [line stringByReplacingCharactersInRange:range withString:@"__ddh_replace_this_ddh__"];
-            }
-//        } while (range.location != NSNotFound);
+        //        do {
+        range = [regex rangeOfFirstMatchInString:line options:0 range:NSMakeRange(0, line.length)];
+        if (range.location != NSNotFound) {
+            line = [line stringByReplacingCharactersInRange:range withString:@"__ddh_replace_this_ddh__"];
+        }
+        //        } while (range.location != NSNotFound);
         
         line = [line stringByReplacingOccurrencesOfString:@"__ddh_replace_this_ddh__" withString:@"\"<#string#>\""];
     }
-
+    
     [lines insertObject:line atIndex:lineNumber+1];
 }
 
@@ -227,22 +227,23 @@
 }
 
 + (NSString *)declarationForStrings:(NSArray<NSString *> *)selectedLines {
-
+    
     NSMutableArray<NSString *> *declarationLines = [[NSMutableArray alloc] init];
     
-    [selectedLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[-+].+\\n?.+\\n?\\{" options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSString *input = [selectedLines componentsJoinedByString:@"\n"];
+    [regex enumerateMatchesInString:input options:0 range:NSMakeRange(0, input.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
         
-        NSString *string = nil;
-        if ([obj hasPrefix:@"- ("] || [obj hasPrefix:@"-("] || [obj hasPrefix:@"+ ("] || [obj hasPrefix:@"+("]) {
-            string = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            if ([string hasSuffix:@"{"]) {
-                string = [string stringByReplacingCharactersInRange:NSMakeRange(string.length-1, 1) withString:@""];
-                string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            }
-            [declarationLines addObject:string];
+        NSString *string = [input substringWithRange:result.range];
+        if ([string hasSuffix:@"{"]) {
+            string = [string substringToIndex:string.length-1];
+            string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         }
+        [declarationLines addObject:string];
     }];
-
+    
     NSString *result = [declarationLines componentsJoinedByString:@";\n"];
     
     return [result stringByAppendingString:@";"];
@@ -254,7 +255,7 @@
     
     NSMutableArray<NSString *> *normalized = [[NSMutableArray alloc] init];
     [selectedLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-       
+        
         NSError *error = nil;
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@" += +" options:NSRegularExpressionCaseInsensitive error:&error];
         
@@ -268,7 +269,7 @@
     
     __block NSInteger maxEqualPosition = 0;
     [normalized enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-       
+        
         NSRange rangeOfEqual = [obj rangeOfString:@"="];
         if (rangeOfEqual.location != NSNotFound &&
             maxEqualPosition < rangeOfEqual.location) {
@@ -298,26 +299,80 @@
     return [selectedLines sortedArrayUsingSelector:@selector(compare:)];
 }
 
-+ (NSString *)protocolFromMethodsInLines:(NSArray<NSString *> *)selectedLines {
-
++ (NSString *)protocolFromMethodsInLines:(NSArray<NSString *> *)selectedLines indentation:(NSString *)indentation contentUTI:(NSString *)contentUTI {
+    
     NSMutableArray<NSString *> *declarationLines = [[NSMutableArray alloc] init];
+    
+    BOOL isObjC = [contentUTI containsString:@".objective-c-source"];
+    BOOL isSwift = [contentUTI containsString:@".swift-source"];
     
     [selectedLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSString *string = nil;
-        if ([obj hasPrefix:@"- ("] || [obj hasPrefix:@"-("] || [obj hasPrefix:@"+ ("] || [obj hasPrefix:@"+("]) {
-            string = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        string = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+        if ([string hasPrefix:@"- ("] || [string hasPrefix:@"-("] || [string hasPrefix:@"+ ("] || [string hasPrefix:@"+("] || [string hasPrefix:@"func "] || [string containsString:@" func "]) {
             if ([string hasSuffix:@"{"]) {
                 string = [string stringByReplacingCharactersInRange:NSMakeRange(string.length-1, 1) withString:@""];
                 string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            }
+            if (isSwift) {
+                string = [NSString stringWithFormat:@"%@%@", indentation, string];
             }
             [declarationLines addObject:string];
         }
     }];
     
-    NSString *result = [declarationLines componentsJoinedByString:@";\n"];
+    NSString *joiningString = @"";
+    if (isObjC) {
+        joiningString = @";\n";
+    } else if (isSwift) {
+        joiningString = @"\n";
+    }
+    
+    NSString *result = [declarationLines componentsJoinedByString:joiningString];
+    
+    
+    NSString *protocolString = @"";
+    if (isObjC) {
+        protocolString = [NSString stringWithFormat:@"@protocol <#Protocol Name#> <NSObject>\n%@;\n@end\n", result];
+    } else if (isSwift) {
+        protocolString = [NSString stringWithFormat:@"protocol <#Protocol Name#> {\n%@\n}\n", result];
+    }
+    
+    return protocolString;
+}
 
-    return [NSString stringWithFormat:@"@protocol <#Protocol Name#> <NSObject>\n%@;\n@end\n", result];
++ (NSString *)objCTestTemplateFromMethodInLine:(NSString *)selectedLine indentation:(NSString *)indentation {
+    
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\w+:" options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSMutableArray *parameterNames = [[NSMutableArray alloc] init];
+    [regex enumerateMatchesInString:selectedLine options:0 range:NSMakeRange(0, selectedLine.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
+        
+        NSString *name = [selectedLine substringWithRange:result.range];
+        name = [name stringByAppendingString:@"<#param#>"];
+        [parameterNames addObject:name];
+    }];
+    
+    regex = [NSRegularExpression regularExpressionWithPattern:@"\\w+ ?\\*? ?" options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSMutableString *resultString = [[NSMutableString alloc] init];
+    [resultString appendString:@"- (void)test_<#test method name#> {\n"];
+    [resultString appendFormat:@"%@// Arrange\n\n\n%@// Act\n", indentation, indentation];
+    NSRange typeRange = [regex rangeOfFirstMatchInString:selectedLine options:0 range:NSMakeRange(0, selectedLine.length)];
+//    typeRange.location = typeRange.location + 1;
+//    typeRange.length = typeRange.length - 2;
+    NSString *typeString = [selectedLine substringWithRange:typeRange];
+    NSString *lastCharacter = [typeString substringFromIndex:typeString.length-1];
+    if (![lastCharacter isEqualToString:@"*"]) {
+        typeString = [typeString stringByAppendingString:@" "];
+    }
+    [resultString appendFormat:@"%@%@<#result#> = [self.sut ", indentation, typeString];
+    [resultString appendString:[parameterNames componentsJoinedByString:@" "]];
+    [resultString appendString:@"];\n\n  // Assert\n\n}"];
+    return [resultString copy];
 }
 
 @end

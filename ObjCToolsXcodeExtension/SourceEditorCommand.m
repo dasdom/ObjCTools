@@ -112,7 +112,19 @@
             NSRange subRange = NSMakeRange(selections.firstObject.start.line, selections.firstObject.end.line-selections.firstObject.start.line+1);
             NSArray<NSString *> *lines = [buffer.lines subarrayWithRange:subRange];
             
-            NSString *declarations = [SourceEditorMethods protocolFromMethodsInLines:lines];
+            NSMutableString *indentation = [[NSMutableString alloc] initWithString:@""];
+            for (int i = 0; i<buffer.indentationWidth; i++) {
+                [indentation appendString:@" "];
+            }
+            if (buffer.usesTabsForIndentation) {
+                NSMutableString *spacesToReplace = [[NSMutableString alloc] initWithString:@""];
+                for (int i = 0; i<buffer.tabWidth; i++) {
+                    [spacesToReplace appendString:@" "];
+                }
+                [indentation replaceOccurrencesOfString:spacesToReplace withString:@"\t" options:0 range:NSMakeRange(0, indentation.length)];
+            }
+            
+            NSString *declarations = [SourceEditorMethods protocolFromMethodsInLines:lines indentation:indentation contentUTI:invocation.buffer.contentUTI];
             
             [[NSPasteboard generalPasteboard] clearContents];
             [[NSPasteboard generalPasteboard] setString:declarations forType:NSStringPboardType];

@@ -196,12 +196,20 @@
     XCTAssertEqualObjects(result, @"- (void)foo;");
 }
 
-- (void)test_declarationForString_multiline {
-    NSArray<NSString *> *input = @[@"- (void)foo {", @"    return;", @"}@", @"-(NSInteger)bar"];
+- (void)test_declarationForString_twoMethods {
+    NSArray<NSString *> *input = @[@"- (void)foo {", @"    return;", @"}@", @"-(NSInteger)bar {"];
     
     NSString *result = [SourceEditorMethods declarationForStrings:input];
     
     XCTAssertEqualObjects(result, @"- (void)foo;\n-(NSInteger)bar;");
+}
+
+- (void)test_declarationForString_multiline {
+    NSArray<NSString *> *input = @[@"- (NSString *)foo:(NSInteger)foo", @"bar:(NSData *)bar {"];
+    
+    NSString *result = [SourceEditorMethods declarationForStrings:input];
+
+    XCTAssertEqualObjects(result, @"- (NSString *)foo:(NSInteger)foo\nbar:(NSData *)bar;");
 }
 
 - (void)test_alignEquals2Lines {
@@ -320,18 +328,52 @@
     XCTAssertEqualObjects(result, expectedResult);
 }
 
-- (void)test_protocolFromSelectedMethods {
+- (void)test_protocolFromSelectedMethods_objC {
     NSArray<NSString *> *input =
     @[
       @"+ (void)foo {",
       @"    return;",
-      @"}@",
+      @"}",
       @"-(NSInteger)bar"
       ];
     
-    NSString *result = [SourceEditorMethods protocolFromMethodsInLines:input];
-
+    NSString *result = [SourceEditorMethods protocolFromMethodsInLines:input indentation:@"  " contentUTI:@".objective-c-source"];
+    
     NSString *expectedResult = @"@protocol <#Protocol Name#> <NSObject>\n+ (void)foo;\n-(NSInteger)bar;\n@end\n";
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+- (void)test_protocolFromSelectedMethods_swift {
+    NSArray<NSString *> *input =
+    @[
+      @"    func foo() {",
+      @"        return",
+      @"    }",
+      @"",
+      @"    func bar(foobar: String) {",
+      ];
+    
+    NSString *result = [SourceEditorMethods protocolFromMethodsInLines:input indentation:@"  " contentUTI:@".swift-source"];
+    
+    NSString *expectedResult = @"protocol <#Protocol Name#> {\n  func foo()\n  func bar(foobar: String)\n}\n";
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+- (void)test_objCTestTemplateFromMethodInLine_objC {
+    NSString *input = @"- (UIViewController *)foo:(NSString *)foo bar:(NSInteger)42 {";
+    
+    NSString *result = [SourceEditorMethods objCTestTemplateFromMethodInLine:input indentation:@"  "];
+    
+    NSString *expectedResult = @"- (void)test_<#test method name#> {\n  // Arrange\n\n\n  // Act\n  UIViewController *<#result#> = [self.sut foo:<#param#> bar:<#param#>];\n\n  // Assert\n\n}";
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+- (void)test_objCTestTemplateFromMethodInLine_objC_2 {
+    NSString *input = @"- (NSInteger)foo:(NSString *)foo bar:(NSInteger)42 {";
+    
+    NSString *result = [SourceEditorMethods objCTestTemplateFromMethodInLine:input indentation:@"  "];
+    
+    NSString *expectedResult = @"- (void)test_<#test method name#> {\n  // Arrange\n\n\n  // Act\n  NSInteger <#result#> = [self.sut foo:<#param#> bar:<#param#>];\n\n  // Assert\n\n}";
     XCTAssertEqualObjects(result, expectedResult);
 }
 
