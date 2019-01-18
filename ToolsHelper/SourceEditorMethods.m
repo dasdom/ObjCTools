@@ -20,11 +20,6 @@
         }
     }];
     
-    //    if (lastImport == 0) {
-    //        [lines ]
-    //    }
-    //
-    
     __block BOOL addEmptyLine = false;
     if (lastImport < 0) {
         [lines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -228,21 +223,8 @@
 
 + (NSString *)declarationForStrings:(NSArray<NSString *> *)selectedLines {
     
-    NSMutableArray<NSString *> *declarationLines = [[NSMutableArray alloc] init];
-    
-    NSError *error = nil;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[-+].+\\n?.+\\n?\\{" options:NSRegularExpressionCaseInsensitive error:&error];
-    
-    NSString *input = [selectedLines componentsJoinedByString:@"\n"];
-    [regex enumerateMatchesInString:input options:0 range:NSMakeRange(0, input.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
-        
-        NSString *string = [input substringWithRange:result.range];
-        if ([string hasSuffix:@"{"]) {
-            string = [string substringToIndex:string.length-1];
-            string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        }
-        [declarationLines addObject:string];
-    }];
+    NSString *input = [selectedLines componentsJoinedByString:@""];
+    NSArray<NSString *> *declarationLines = [self declarationLinesFromString:input];
     
     NSString *result = [declarationLines componentsJoinedByString:@";\n"];
     
@@ -301,27 +283,11 @@
 
 + (NSString *)protocolFromMethodsInLines:(NSArray<NSString *> *)selectedLines indentation:(NSString *)indentation contentUTI:(NSString *)contentUTI {
     
-    NSMutableArray<NSString *> *declarationLines = [[NSMutableArray alloc] init];
-    
     BOOL isObjC = [contentUTI containsString:@".objective-c-source"];
     BOOL isSwift = [contentUTI containsString:@".swift-source"];
     
-    [selectedLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        NSString *string = nil;
-        string = [obj stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        
-        if ([string hasPrefix:@"- ("] || [string hasPrefix:@"-("] || [string hasPrefix:@"+ ("] || [string hasPrefix:@"+("] || [string hasPrefix:@"func "] || [string containsString:@" func "]) {
-            if ([string hasSuffix:@"{"]) {
-                string = [string stringByReplacingCharactersInRange:NSMakeRange(string.length-1, 1) withString:@""];
-                string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            }
-            if (isSwift) {
-                string = [NSString stringWithFormat:@"%@%@", indentation, string];
-            }
-            [declarationLines addObject:string];
-        }
-    }];
+    NSString *input = [selectedLines componentsJoinedByString:@""];
+    NSArray<NSString *> *declarationLines = [self declarationLinesFromString:input];
     
     NSString *joiningString = @"";
     if (isObjC) {
@@ -331,7 +297,6 @@
     }
     
     NSString *result = [declarationLines componentsJoinedByString:joiningString];
-    
     
     NSString *protocolString = @"";
     if (isObjC) {
@@ -343,28 +308,24 @@
     return protocolString;
 }
 
-+ (NSString *)objCTestTemplateFromMethodInLine:(NSString *)selectedLine indentation:(NSString *)indentation {
++ (NSString *)objCTestTemplateFromMethodInLines:(NSArray<NSString *> *)selectedLines indentation:(NSString *)indentation {
+    
+    NSString *input = [selectedLines componentsJoinedByString:@""];
+    NSArray<NSString *> *declarationLines = [self declarationLinesFromString:input];
+    
+    NSString *firstSelectedMethodDeclaration = declarationLines.firstObject;
+    
+    NSArray *parameterNames = [self methodParameterNamesFromString:firstSelectedMethodDeclaration];
     
     NSError *error = nil;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\w+:" options:NSRegularExpressionCaseInsensitive error:&error];
-    
-    NSMutableArray *parameterNames = [[NSMutableArray alloc] init];
-    [regex enumerateMatchesInString:selectedLine options:0 range:NSMakeRange(0, selectedLine.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
-        
-        NSString *name = [selectedLine substringWithRange:result.range];
-        name = [name stringByAppendingString:@"<#param#>"];
-        [parameterNames addObject:name];
-    }];
-    
-    regex = [NSRegularExpression regularExpressionWithPattern:@"\\w+ ?\\*? ?" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\w+ ?\\*? ?" options:NSRegularExpressionCaseInsensitive error:&error];
     
     NSMutableString *resultString = [[NSMutableString alloc] init];
     [resultString appendString:@"- (void)test_<#test method name#> {\n"];
     [resultString appendFormat:@"%@// Arrange\n\n\n%@// Act\n", indentation, indentation];
-    NSRange typeRange = [regex rangeOfFirstMatchInString:selectedLine options:0 range:NSMakeRange(0, selectedLine.length)];
-//    typeRange.location = typeRange.location + 1;
-//    typeRange.length = typeRange.length - 2;
-    NSString *typeString = [selectedLine substringWithRange:typeRange];
+    NSRange typeRange = [regex rangeOfFirstMatchInString:firstSelectedMethodDeclaration options:0 range:NSMakeRange(0, firstSelectedMethodDeclaration.length)];
+
+    NSString *typeString = [firstSelectedMethodDeclaration substringWithRange:typeRange];
     NSString *lastCharacter = [typeString substringFromIndex:typeString.length-1];
     if (![lastCharacter isEqualToString:@"*"]) {
         typeString = [typeString stringByAppendingString:@" "];
@@ -373,6 +334,54 @@
     [resultString appendString:[parameterNames componentsJoinedByString:@" "]];
     [resultString appendString:@"];\n\n  // Assert\n\n}"];
     return [resultString copy];
+}
+
+#pragma mark - Helpers
++ (NSArray<NSString *> *)declarationLinesFromString:(NSString *)input {
+    
+    NSMutableArray<NSString *> *declarationLines = [[NSMutableArray alloc] init];
+    NSError *error = nil;
+//    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[-+(func)].+\\n?.+\\n?.+\\n?.+\\n?\\{" options:NSRegularExpressionCaseInsensitive error:&error];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[-+(func)]([^}]+\\n?)\\{" options:NSRegularExpressionCaseInsensitive error:&error];
+
+    [regex enumerateMatchesInString:input options:0 range:NSMakeRange(0, input.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
+        
+        NSString *string = [input substringWithRange:result.range];
+        if ([string hasSuffix:@"{"]) {
+            string = [string substringToIndex:string.length-1];
+            string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+        [declarationLines addObject:string];
+    }];
+    
+    return [declarationLines copy];
+}
+
++ (NSArray<NSString *> *)methodParameterNamesFromString:(NSString *)input {
+ 
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\w+:" options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSMutableArray *parameterNames = [[NSMutableArray alloc] init];
+    [regex enumerateMatchesInString:input options:0 range:NSMakeRange(0, input.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
+        
+        NSString *name = [input substringWithRange:result.range];
+        name = [name stringByAppendingString:@"<#param#>"];
+        [parameterNames addObject:name];
+    }];
+    
+    if ([parameterNames count] < 1) {
+        regex = [NSRegularExpression regularExpressionWithPattern:@"\\w+ ?$" options:NSRegularExpressionCaseInsensitive error:&error];
+        NSRange range = NSMakeRange(NSNotFound, 0);
+        range = [regex rangeOfFirstMatchInString:input options:0 range:NSMakeRange(0, input.length)];
+        if (range.location != NSNotFound) {
+            NSString *name = [input substringWithRange:range];
+            name = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            [parameterNames addObject:name];
+        }
+    }
+    
+    return [parameterNames copy];
 }
 
 @end

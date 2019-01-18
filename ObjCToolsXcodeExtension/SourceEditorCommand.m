@@ -44,8 +44,7 @@
             error = [NSError errorWithDomain:@"WrongLanguage" code:1001 userInfo:@{NSLocalizedDescriptionKey: @"This functionality only supports Objctive-C."}];
         }
         
-    } else if ([identifier containsString:@".DublicateLineAndReplaceStrings"] ||
-               [identifier containsString:@".DublicateLine"]) {
+    } else if ([identifier containsString:@".DublicateLineAndReplaceStrings"]) {
         
         BOOL replaceStrings = [identifier containsString:@".DublicateLineAndReplaceStrings"];
         
@@ -128,6 +127,33 @@
             
             [[NSPasteboard generalPasteboard] clearContents];
             [[NSPasteboard generalPasteboard] setString:declarations forType:NSStringPboardType];
+        } else {
+            error = [NSError errorWithDomain:@"WrongLanguage" code:1001 userInfo:@{NSLocalizedDescriptionKey: @"This functionality only supports Objctive-C."}];
+        }
+    } else if ([identifier containsString:@".CopyObjCTestTemplateToClipboard"]) {
+       
+        if (isObjC) {
+            
+            NSRange subRange = NSMakeRange(selections.firstObject.start.line, selections.firstObject.end.line-selections.firstObject.start.line+1);
+            NSArray<NSString *> *lines = [buffer.lines subarrayWithRange:subRange];
+
+            NSMutableString *indentation = [[NSMutableString alloc] initWithString:@""];
+            for (int i = 0; i<buffer.indentationWidth; i++) {
+                [indentation appendString:@" "];
+            }
+            if (buffer.usesTabsForIndentation) {
+                NSMutableString *spacesToReplace = [[NSMutableString alloc] initWithString:@""];
+                for (int i = 0; i<buffer.tabWidth; i++) {
+                    [spacesToReplace appendString:@" "];
+                }
+                [indentation replaceOccurrencesOfString:spacesToReplace withString:@"\t" options:0 range:NSMakeRange(0, indentation.length)];
+            }
+            
+            NSString *testTemplate = [SourceEditorMethods objCTestTemplateFromMethodInLines:lines indentation:indentation];
+            
+            [[NSPasteboard generalPasteboard] clearContents];
+            [[NSPasteboard generalPasteboard] setString:testTemplate forType:NSStringPboardType];
+            
         } else {
             error = [NSError errorWithDomain:@"WrongLanguage" code:1001 userInfo:@{NSLocalizedDescriptionKey: @"This functionality only supports Objctive-C."}];
         }

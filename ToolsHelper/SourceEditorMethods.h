@@ -14,5 +14,5 @@
 + (NSArray<NSString *> *)alignEquals:(NSArray<NSString *> *)selectedLines;
 + (NSArray<NSString *> *)sortSelectedLines:(NSArray<NSString *> *)selectedLines;
 + (NSString *)protocolFromMethodsInLines:(NSArray<NSString *> *)selectedLines indentation:(NSString *)indentation contentUTI:(NSString *)contentUTI;
-+ (NSString *)objCTestTemplateFromMethodInLine:(NSString *)selectedLine indentation:(NSString *)indentation;
++ (NSString *)objCTestTemplateFromMethodInLines:(NSArray<NSString *> *)selectedLines indentation:(NSString *)indentation;
 @end
