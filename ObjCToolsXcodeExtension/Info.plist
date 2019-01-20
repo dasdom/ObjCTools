@@ -32,14 +32,6 @@
 					<key>XCSourceEditorCommandClassName</key>
 					<string>SourceEditorCommand</string>
 					<key>XCSourceEditorCommandIdentifier</key>
-					<string>$(PRODUCT_BUNDLE_IDENTIFIER).ImportHeader</string>
-					<key>XCSourceEditorCommandName</key>
-					<string>Import Header (ObjC)</string>
-				</dict>
-				<dict>
-					<key>XCSourceEditorCommandClassName</key>
-					<string>SourceEditorCommand</string>
-					<key>XCSourceEditorCommandIdentifier</key>
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).AddClassDeclaration</string>
 					<key>XCSourceEditorCommandName</key>
 					<string>Add Class Declaration (ObjC)</string>
@@ -48,9 +40,60 @@
 					<key>XCSourceEditorCommandClassName</key>
 					<string>SourceEditorCommand</string>
 					<key>XCSourceEditorCommandIdentifier</key>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).AlignEquals</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Align equals (ObjC and Swift)</string>
+				</dict>
+
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).CopyDeclarationToClipboard</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Copy Declarations of Selected Methods to Clipboard (ObjC)</string>
+				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).CopyObjCTestTemplateToClipboard</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Copy ObjC Test Template For Selected Methods To Clipboard (ObjC)</string>
+				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).CopyProtocolDeclarationToClipboard</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Copy Protocol Declarations For Selected Methods To Clipboard (ObjC and Swift)</string>
+				</dict>
+
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).DublicateLineAndReplaceStrings</string>
 					<key>XCSourceEditorCommandName</key>
 					<string>Duplicate Line and Replace First String (ObjC and Swift)</string>
+				</dict>
+
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).HexToUIColor</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Hex to UIColor (ObjC and Swift)</string>
+				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>SourceEditorCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>$(PRODUCT_BUNDLE_IDENTIFIER).ImportHeader</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Import Header (ObjC)</string>
 				</dict>
 				<dict>
 					<key>XCSourceEditorCommandClassName</key>
@@ -64,49 +107,9 @@
 					<key>XCSourceEditorCommandClassName</key>
 					<string>SourceEditorCommand</string>
 					<key>XCSourceEditorCommandIdentifier</key>
-					<string>$(PRODUCT_BUNDLE_IDENTIFIER).HexToUIColor</string>
-					<key>XCSourceEditorCommandName</key>
-					<string>Hex to UIColor (ObjC and Swift)</string>
-				</dict>
-				<dict>
-					<key>XCSourceEditorCommandClassName</key>
-					<string>SourceEditorCommand</string>
-					<key>XCSourceEditorCommandIdentifier</key>
-					<string>$(PRODUCT_BUNDLE_IDENTIFIER).CopyDeclarationToClipboard</string>
-					<key>XCSourceEditorCommandName</key>
-					<string>Copy Declarations of Selected Methods to Clipboard (ObjC)</string>
-				</dict>
-				<dict>
-					<key>XCSourceEditorCommandClassName</key>
-					<string>SourceEditorCommand</string>
-					<key>XCSourceEditorCommandIdentifier</key>
-					<string>$(PRODUCT_BUNDLE_IDENTIFIER).AlignEquals</string>
-					<key>XCSourceEditorCommandName</key>
-					<string>Align equals (ObjC and Swift)</string>
-				</dict>
-				<dict>
-					<key>XCSourceEditorCommandClassName</key>
-					<string>SourceEditorCommand</string>
-					<key>XCSourceEditorCommandIdentifier</key>
 					<string>$(PRODUCT_BUNDLE_IDENTIFIER).SortSelected</string>
 					<key>XCSourceEditorCommandName</key>
 					<string>Sort Selected Lines (ObjC and Swift)</string>
-				</dict>
-				<dict>
-					<key>XCSourceEditorCommandClassName</key>
-					<string>SourceEditorCommand</string>
-					<key>XCSourceEditorCommandIdentifier</key>
-					<string>$(PRODUCT_BUNDLE_IDENTIFIER).CopyProtocolDeclarationToClipboard</string>
-					<key>XCSourceEditorCommandName</key>
-					<string>Copy Protocol Declarations For Selected Methods To Clipboard (ObjC and Swift)</string>
-				</dict>
-				<dict>
-					<key>XCSourceEditorCommandClassName</key>
-					<string>SourceEditorCommand</string>
-					<key>XCSourceEditorCommandIdentifier</key>
-					<string>$(PRODUCT_BUNDLE_IDENTIFIER).CopyObjCTestTemplateToClipboard</string>
-					<key>XCSourceEditorCommandName</key>
-					<string>Copy ObjC Test Template For Selected Methods To Clipboard (ObjC)</string>
 				</dict>
 			</array>
 			<key>XCSourceEditorExtensionPrincipalClass</key>

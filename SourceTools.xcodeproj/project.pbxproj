@@ -668,7 +668,7 @@
 				CODE_SIGN_ENTITLEMENTS = ObjCTools/ObjCTools.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = Q6PD97MRX4;
+				DEVELOPMENT_TEAM = R8XXQFTA4C;
 				INFOPLIST_FILE = ObjCTools/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
@@ -684,7 +684,7 @@
 				CODE_SIGN_ENTITLEMENTS = ObjCTools/ObjCTools.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = Q6PD97MRX4;
+				DEVELOPMENT_TEAM = R8XXQFTA4C;
 				INFOPLIST_FILE = ObjCTools/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
@@ -699,7 +699,7 @@
 				CODE_SIGN_ENTITLEMENTS = ObjCToolsXcodeExtension/ObjCToolsXcodeExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = Q6PD97MRX4;
+				DEVELOPMENT_TEAM = R8XXQFTA4C;
 				INFOPLIST_FILE = ObjCToolsXcodeExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
@@ -715,7 +715,7 @@
 				CODE_SIGN_ENTITLEMENTS = ObjCToolsXcodeExtension/ObjCToolsXcodeExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = Q6PD97MRX4;
+				DEVELOPMENT_TEAM = R8XXQFTA4C;
 				INFOPLIST_FILE = ObjCToolsXcodeExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
