@@ -3,6 +3,7 @@
 //
 
 #import "SourceEditorMethods.h"
+#import "NSString+RangeOfRegex.h"
 
 @implementation SourceEditorMethods
 
@@ -235,45 +236,101 @@
     
     // regex: @" += +"
     
+    NSMutableArray *lineArrays = [[NSMutableArray alloc] init];
     NSMutableArray<NSString *> *normalized = [[NSMutableArray alloc] init];
+    NSMutableArray<NSString *> *originalLines = [[NSMutableArray alloc] init];
+    __block BOOL endedInComment = NO;
+    
     [selectedLines enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        NSError *error = nil;
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@" += +" options:NSRegularExpressionCaseInsensitive error:&error];
+        NSRange equalRange = [obj rangeOfFirstMatchForRegex:@" += +"];
+        NSRange commentRange = [obj rangeOfFirstMatchForRegex:@"/{2,}.+ += +"];
         
-        NSRange range = NSMakeRange(NSNotFound, 0);
-        range = [regex rangeOfFirstMatchInString:obj options:0 range:NSMakeRange(0, obj.length)];
-        if (range.location != NSNotFound) {
-            obj = [obj stringByReplacingCharactersInRange:range withString:@" = "];
+        [originalLines addObject:obj];
+        
+        NSRange multilineCommentStartRange = [obj rangeOfString:@"/*"];
+        NSRange multilineCommentEndRange = [obj rangeOfString:@"*/"];
+        if (multilineCommentEndRange.location != NSNotFound) {
+            [lineArrays addObject:@{@"type": @"comment", @"lines": [originalLines copy]}];
+            [originalLines removeAllObjects];
+            [normalized removeAllObjects];
+            endedInComment = NO;
+        } else if (multilineCommentStartRange.location != NSNotFound) {
+            [lineArrays addObject:@{@"type": @"normalized", @"lines": [normalized copy]}];
+            [originalLines removeAllObjects];
+            [originalLines addObject:obj];
+            [normalized removeAllObjects];
+            endedInComment = YES;
+        } else {
+            
+            if (equalRange.location != NSNotFound && commentRange.location == NSNotFound) {
+                obj = [obj stringByReplacingCharactersInRange:equalRange withString:@" = "];
+            }
+            [normalized addObject:obj];
         }
-        [normalized addObject:obj];
     }];
     
+    if (endedInComment) {
+        [lineArrays addObject:@{@"type": @"comment", @"lines": [originalLines copy]}];
+    } else {
+        [lineArrays addObject:@{@"type": @"normalized", @"lines": [normalized copy]}];
+    }
+    
     __block NSInteger maxEqualPosition = 0;
-    [normalized enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        NSRange rangeOfEqual = [obj rangeOfString:@"="];
-        if (rangeOfEqual.location != NSNotFound &&
-            maxEqualPosition < rangeOfEqual.location) {
-            
-            maxEqualPosition = rangeOfEqual.location;
+    
+    [lineArrays enumerateObjectsUsingBlock:^(NSDictionary *dict, NSUInteger dictidx, BOOL * _Nonnull dictstop) {
+        if ([dict[@"type"] isEqualToString:@"normalized"]) {
+            NSArray *temp = dict[@"lines"];
+            [temp enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                NSRange commentRange = [obj rangeOfFirstMatchForRegex:@"/{2,}.+ += +"];
+                
+                NSRange rangeOfEqual = [obj rangeOfString:@"="];
+                if (rangeOfEqual.location != NSNotFound && maxEqualPosition < rangeOfEqual.location && commentRange.location == NSNotFound) {
+                    
+                    maxEqualPosition = rangeOfEqual.location;
+                }
+            }];
         }
     }];
     
     NSMutableArray<NSString *> *output = [[NSMutableArray alloc] init];
-    [normalized enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    
+    [lineArrays enumerateObjectsUsingBlock:^(NSDictionary *dict, NSUInteger dictidx, BOOL * _Nonnull dictstop) {
         
-        NSRange rangeOfEqual = [obj rangeOfString:@"="];
-        NSInteger additionalSpaces = maxEqualPosition - rangeOfEqual.location;
-        NSMutableString *spaces = [[NSMutableString alloc] initWithString:@""];
-        for (int i = 0; i<additionalSpaces; i++) {
-            [spaces appendString:@" "];
+        if ([dict[@"type"] isEqualToString:@"normalized"]) {
+            
+            NSArray *temp = dict[@"lines"];
+            
+            [temp enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                NSRange commentRange = [obj rangeOfFirstMatchForRegex:@"/{2,}.+ += +"];
+                
+                if (commentRange.location == NSNotFound) {
+                    
+                    NSRange rangeOfEqual = [obj rangeOfString:@"="];
+                    NSInteger additionalSpaces = maxEqualPosition - rangeOfEqual.location;
+                    NSMutableString *spaces = [[NSMutableString alloc] initWithString:@""];
+                    for (int i = 0; i<additionalSpaces; i++) {
+                        [spaces appendString:@" "];
+                    }
+                    NSString *stringToReplace = [NSString stringWithFormat:@"%@=", spaces];
+                    
+                    NSString *changedString = [obj stringByReplacingOccurrencesOfString:@"=" withString:stringToReplace];
+                    [output addObject:changedString];
+                } else {
+                    [output addObject:obj];
+                }
+                
+                
+                
+            }];
+        } else {
+            NSArray *temp = dict[@"lines"];
+            [output addObjectsFromArray:temp];
         }
-        NSString *stringToReplace = [NSString stringWithFormat:@"%@=", spaces];
-        
-        NSString *changedString = [obj stringByReplacingOccurrencesOfString:@"=" withString:stringToReplace];
-        [output addObject:changedString];
     }];
+    
     return output;
 }
 
@@ -324,7 +381,7 @@
     [resultString appendString:@"- (void)test_<#test method name#> {\n"];
     [resultString appendFormat:@"%@// Arrange\n\n\n%@// Act\n", indentation, indentation];
     NSRange typeRange = [regex rangeOfFirstMatchInString:firstSelectedMethodDeclaration options:0 range:NSMakeRange(0, firstSelectedMethodDeclaration.length)];
-
+    
     NSString *typeString = [firstSelectedMethodDeclaration substringWithRange:typeRange];
     NSString *lastCharacter = [typeString substringFromIndex:typeString.length-1];
     if (![lastCharacter isEqualToString:@"*"]) {
@@ -341,9 +398,9 @@
     
     NSMutableArray<NSString *> *declarationLines = [[NSMutableArray alloc] init];
     NSError *error = nil;
-//    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[-+(func)].+\\n?.+\\n?.+\\n?.+\\n?\\{" options:NSRegularExpressionCaseInsensitive error:&error];
+    //    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[-+(func)].+\\n?.+\\n?.+\\n?.+\\n?\\{" options:NSRegularExpressionCaseInsensitive error:&error];
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[-+(func)]([^}]+\\n?)\\{" options:NSRegularExpressionCaseInsensitive error:&error];
-
+    
     [regex enumerateMatchesInString:input options:0 range:NSMakeRange(0, input.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
         
         NSString *string = [input substringWithRange:result.range];
@@ -358,7 +415,7 @@
 }
 
 + (NSArray<NSString *> *)methodParameterNamesFromString:(NSString *)input {
- 
+    
     NSError *error = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\w+:" options:NSRegularExpressionCaseInsensitive error:&error];
     

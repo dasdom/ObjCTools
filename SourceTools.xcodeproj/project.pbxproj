@@ -15,6 +15,8 @@
 		F2264ABD211F423600B9E55C /* SourceEditorMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = F2264ABB211F423600B9E55C /* SourceEditorMethods.m */; };
 		F2264ABE211F430600B9E55C /* ToolsHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2264A9C211F420D00B9E55C /* ToolsHelper.framework */; };
 		F2264AC02120502B00B9E55C /* SourceEditorMethodsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2264ABF2120502B00B9E55C /* SourceEditorMethodsTests.m */; };
+		F236256822FDB91F0075FC2F /* NSString+RangeOfRegex.h in Headers */ = {isa = PBXBuildFile; fileRef = F236256622FDB91F0075FC2F /* NSString+RangeOfRegex.h */; };
+		F236256922FDB91F0075FC2F /* NSString+RangeOfRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = F236256722FDB91F0075FC2F /* NSString+RangeOfRegex.m */; };
 		F2403604210EFDF3005080F8 /* DDHWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = F2403603210EFDF3005080F8 /* DDHWindow.m */; };
 		F25194A3210C4D4F000DE64C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F25194A2210C4D4F000DE64C /* AppDelegate.m */; };
 		F25194A6210C4D4F000DE64C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F25194A5210C4D4F000DE64C /* ViewController.m */; };
@@ -92,6 +94,8 @@
 		F2264ABA211F423600B9E55C /* SourceEditorMethods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SourceEditorMethods.h; sourceTree = "<group>"; };
 		F2264ABB211F423600B9E55C /* SourceEditorMethods.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceEditorMethods.m; sourceTree = "<group>"; };
 		F2264ABF2120502B00B9E55C /* SourceEditorMethodsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceEditorMethodsTests.m; sourceTree = "<group>"; };
+		F236256622FDB91F0075FC2F /* NSString+RangeOfRegex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+RangeOfRegex.h"; sourceTree = "<group>"; };
+		F236256722FDB91F0075FC2F /* NSString+RangeOfRegex.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+RangeOfRegex.m"; sourceTree = "<group>"; };
 		F2403602210EFDF3005080F8 /* DDHWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHWindow.h; sourceTree = "<group>"; };
 		F2403603210EFDF3005080F8 /* DDHWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHWindow.m; sourceTree = "<group>"; };
 		F251949E210C4D4F000DE64C /* SourceTools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SourceTools.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +161,8 @@
 				F2264A9F211F420E00B9E55C /* Info.plist */,
 				F2264ABA211F423600B9E55C /* SourceEditorMethods.h */,
 				F2264ABB211F423600B9E55C /* SourceEditorMethods.m */,
+				F236256622FDB91F0075FC2F /* NSString+RangeOfRegex.h */,
+				F236256722FDB91F0075FC2F /* NSString+RangeOfRegex.m */,
 			);
 			path = ToolsHelper;
 			sourceTree = "<group>";
@@ -241,6 +247,7 @@
 			files = (
 				F2264AAE211F420E00B9E55C /* ToolsHelper.h in Headers */,
 				F2264ABC211F423600B9E55C /* SourceEditorMethods.h in Headers */,
+				F236256822FDB91F0075FC2F /* NSString+RangeOfRegex.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,6 +416,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F236256922FDB91F0075FC2F /* NSString+RangeOfRegex.m in Sources */,
 				F2264ABD211F423600B9E55C /* SourceEditorMethods.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

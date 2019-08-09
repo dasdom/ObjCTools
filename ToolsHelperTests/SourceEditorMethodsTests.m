@@ -305,6 +305,73 @@
     XCTAssertEqualObjects(result, expectedResult);
 }
 
+- (void)test_alignEquals_ignoresComments {
+  NSArray<NSString *> *input =
+  @[
+    @"// foo    = bar",
+    @"window.maxSize = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+    @"window.contentViewController = contentViewController;",
+    ];
+  
+  NSArray<NSString *> *result = [SourceEditorMethods alignEquals:input];
+  
+  NSArray<NSString *> *expectedResult =
+  @[
+    @"// foo    = bar",
+    @"window.maxSize               = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+    @"window.contentViewController = contentViewController;",
+    ];
+  XCTAssertEqualObjects(result, expectedResult);
+}
+
+- (void)test_alignEquals_ignoresMultilineComments {
+    NSArray<NSString *> *input =
+    @[
+      @" foo    = bar",
+      @" bla    = blub */",
+      @"window.maxSize = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController = contentViewController;",
+      ];
+    
+    NSArray<NSString *> *result = [SourceEditorMethods alignEquals:input];
+    
+    NSArray<NSString *> *expectedResult =
+    @[
+      @" foo    = bar",
+      @" bla    = blub */",
+      @"window.maxSize               = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController = contentViewController;",
+      ];
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
+- (void)test_alignEquals_ignoresMultilineComments_2 {
+    NSArray<NSString *> *input =
+    @[
+      @"window.tabbingMode = NSWindowTabbingModeDisallowed;",
+      @" /** bla bla blubb",
+      @" foo    = bar",
+      @" bla    = blub",
+      @" */",
+      @"window.maxSize = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController = contentViewController;",
+      ];
+    
+    NSArray<NSString *> *result = [SourceEditorMethods alignEquals:input];
+    
+    NSArray<NSString *> *expectedResult =
+    @[
+      @"window.tabbingMode           = NSWindowTabbingModeDisallowed;",
+      @" /** bla bla blubb",
+      @" foo    = bar",
+      @" bla    = blub",
+      @" */",
+      @"window.maxSize               = NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX);",
+      @"window.contentViewController = contentViewController;",
+      ];
+    XCTAssertEqualObjects(result, expectedResult);
+}
+
 - (void)test_sortSelectedLines_alreadySorted {
     NSArray<NSString *> *input =
     @[
